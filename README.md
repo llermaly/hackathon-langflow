@@ -25,3 +25,20 @@
 4. Select - `manifest.json` from `dist` folder at root
 
 ### <i>Remember in firefox you add plugin in temporary mode, that's mean it's disappear after close browser, you must do it again, on next launch.</i>
+
+
+## Importing Flows into Langflow
+
+To import flows into Langflow, follow these steps:
+
+1. **Install Langflow Locally:**
+   Follow the installation guide for setting up Langflow on your local machine. You can find the guide [here](https://docs.langflow.org/getting-started/install-langflow).
+
+   Note: The cloud version uses an older version of Langflow and is not recommended for use.
+
+2. **Access Langflow:**
+   Once Langflow is up and running, navigate to `/all` in your browser.
+
+3. **Import Flows:**
+   On the right-hand side of the "Folders" section, you'll find an icon to import a JSON file. Click on this icon to import your JSON flows.
+
