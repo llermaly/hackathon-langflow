@@ -1,51 +1,123 @@
 import '@src/Popup.css';
-import { useStorageSuspense, withErrorBoundary, withSuspense } from '@chrome-extension-boilerplate/shared';
-import { exampleThemeStorage } from '@chrome-extension-boilerplate/storage';
+import { withErrorBoundary, withSuspense } from '@chrome-extension-boilerplate/shared';
+import { useState } from 'react';
 
-import { ComponentPropsWithoutRef } from 'react';
+interface ButtonProps {
+  children: React.ReactNode;
+  className?: string;
+  isDisabled?: boolean;
+  isSelected?: boolean;
+  [key: string]: any;
+}
 
-const Popup = () => {
-  const theme = useStorageSuspense(exampleThemeStorage);
+const Button = ({ children, className, isDisabled, isSelected, ...rest }: ButtonProps) => {
+  return (
+    <button
+      disabled={isDisabled}
+      className={`px-4 py-1 text-white  rounded-md active:opacity-80 ${isDisabled || isSelected ? 'bg-gray-500' : 'bg-black'} ${className}`}
+      {...rest}>
+      {children}
+    </button>
+  );
+};
+
+export function getBodyHTML() {
+  return document.body.innerHTML;
+}
+
+export function getFormHTML() {
+  const form = document.querySelector('form');
+  return form ? form.outerHTML : 'No se encontró ningún formulario';
+}
+
+const EcommerceStep = () => {
+  const [savedData, setSavedData] = useState<string>(JSON.stringify({ data: 'something' }));
+  const [html, setHtml] = useState<string>('');
+
+  const extractBodyHTML = () => {
+    chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+      chrome.scripting.executeScript(
+        {
+          target: { tabId: tabs[0].id || 0 },
+          func: getBodyHTML,
+        },
+        results => {
+          console.log(results[0].result);
+          setHtml(results?.[0]?.result ?? '');
+        },
+      );
+    });
+  };
 
   return (
-    <div
-      className="App"
-      style={{
-        backgroundColor: theme === 'light' ? '#eee' : '#222',
-      }}>
-      <header className="App-header" style={{ color: theme === 'light' ? '#222' : '#eee' }}>
-        <img src={chrome.runtime.getURL('popup/logo.svg')} className="App-logo" alt="logo" />
-
-        <p>
-          Edit <code>pages/popup/src/Popup.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ color: theme === 'light' ? '#0281dc' : undefined, marginBottom: '10px' }}>
-          Learn React!
-        </a>
-        <ToggleButton>Toggle theme</ToggleButton>
-      </header>
+    <div className="flex flex-col gap-2">
+      <Button onClick={extractBodyHTML}>Get body html</Button>
+      <div>
+        <p className="font-bold">Obtained HTML:</p>{' '}
+        <div className="max-h-[200px] max-w-[300px] overflow-auto">{html}</div>
+      </div>
+      <Button>Send html to langflow</Button>
+      <div>
+        <p className="font-bold">Obtained data from langflow:</p> <span>{savedData}</span>
+      </div>
     </div>
   );
 };
 
-const ToggleButton = (props: ComponentPropsWithoutRef<'button'>) => {
-  const theme = useStorageSuspense(exampleThemeStorage);
+const FormStep = () => {
+  const [savedData, setSavedData] = useState<string>(JSON.stringify({ data: 'something' }));
+  const [html, setHtml] = useState<string>('');
+
+  const extractBodyHTML = () => {
+    chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+      chrome.scripting.executeScript(
+        {
+          target: { tabId: tabs[0].id || 0 },
+          func: getFormHTML,
+        },
+        results => {
+          console.log(results[0].result);
+          setHtml(results?.[0]?.result ?? '');
+        },
+      );
+    });
+  };
+
   return (
-    <button
-      className={
-        props.className +
-        ' ' +
-        'font-bold mt-4 py-1 px-4 rounded shadow hover:scale-105 ' +
-        (theme === 'light' ? 'bg-white text-black' : 'bg-black text-white')
-      }
-      onClick={exampleThemeStorage.toggle}>
-      {props.children}
-    </button>
+    <div className="flex flex-col gap-2">
+      <div>
+        <p className="font-bold">Product data:</p>{' '}
+        <div className="max-h-[200px] max-w-[300px] overflow-auto">{savedData}</div>
+      </div>
+      <Button onClick={extractBodyHTML}>Get form to fill html</Button>
+      <div>
+        <p className="font-bold">Obtained HTML:</p>{' '}
+        <div className="max-h-[200px] max-w-[300px] overflow-auto">{html}</div>
+      </div>
+      <Button>Send form to fill + product data</Button>
+      <div>
+        <p>Obtained data from langflow:</p> <span>{savedData}</span>
+      </div>
+    </div>
+  );
+};
+
+const Popup = () => {
+  const [step, setStep] = useState<'ecommerce' | 'form'>('ecommerce');
+
+  return (
+    <div className="flex flex-col items-center justify-center pt-2">
+      <h1 className="mb-2 text-2xl font-bold">Omawei</h1>
+      <div className="flex gap-2 mb-4">
+        <Button isSelected={step === 'ecommerce'} onClick={() => setStep('ecommerce')}>
+          Ecommerce
+        </Button>
+        <Button isSelected={step === 'form'} onClick={() => setStep('form')}>
+          Form
+        </Button>
+      </div>
+      {step === 'ecommerce' ? <EcommerceStep /> : <FormStep />}
+    </div>
   );
 };
 
