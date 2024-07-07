@@ -1,0 +1,37 @@
+{
+  "trackingId": {
+    "HTMLselectorType": "id",
+    "HTMLselectorValue": "tracking",
+    "value": "8190032481404275"
+  },
+  "storeName": {
+    "HTMLselectorType": "id",
+    "HTMLselectorValue": "proveedor",
+    "value": "FUNCHOICE Store"
+  },
+  "productName": {
+    "HTMLselectorType": "id",
+    "HTMLselectorValue": "description",
+    "value": "1000 in 1 Universal Remote Control K-1028E AC Digital LCD for Air Conditioner"
+  },
+  "productPrice": {
+    "HTMLselectorType": "id",
+    "HTMLselectorValue": "amount",
+    "value": "10.26"
+  },
+  "productDescription": {
+    "HTMLselectorType": "id",
+    "HTMLselectorValue": "description",
+    "value": "1000 in 1 Universal Remote Control K-1028E AC Digital LCD for Air Conditioner, WHITE"
+  },
+  "otherInformation": {
+    "HTMLselectorType": "id",
+    "HTMLselectorValue": "info_adicional",
+    "value": "Order Status: Esperando entrega, Estimated Delivery Date: 11 jul, 2024, Order Date: 3 jul, 2024, Payment Method: Tarjeta de crédito/débito, Buyer Protection: La protección del comprador te permite conseguir tu reembolso dentro del periodo de protección si tu artículo no llega, llega dañado, o no llega acorde a su descripción., Free Returns: ¿No estás satisfecho con tu pedido? Envíalo dentro de los 90 días siguientes de hacerlo. La primera devolución de cada pedido es gratuita., Fast Delivery: Cupón de US $1.00 por entrega tardía · Reembolso por artículos que llegan dañados · Reembolso por pérdida del paquete · Reembolso si no llega en 30 días"
+  },
+  "granteeTime": {
+    "HTMLselectorType": "id",
+    "HTMLselectorValue": "info_adicional",
+    "value": "90 días"
+  }
+}
