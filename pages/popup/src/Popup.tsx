@@ -1,6 +1,8 @@
 import '@src/Popup.css';
 import { withErrorBoundary, withSuspense } from '@chrome-extension-boilerplate/shared';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
+import { postEcommerceHtmlParserFlow, postFormHtmlParserFlow } from './requests/lanflow-requests';
 
 interface ButtonProps {
   children: React.ReactNode;
@@ -30,9 +32,25 @@ export function getFormHTML() {
   return form ? form.outerHTML : 'No se encontró ningún formulario';
 }
 
-const EcommerceStep = () => {
+interface EcommerceStepProps {
+  handleProductData: (data: string) => void;
+}
+
+const EcommerceStep = ({ handleProductData }: Readonly<EcommerceStepProps>) => {
   const [savedData, setSavedData] = useState<string>(JSON.stringify({ data: 'something' }));
   const [html, setHtml] = useState<string>('');
+
+  async function sendHtmlToLangflow() {
+    const response = await postEcommerceHtmlParserFlow(html);
+
+    try {
+      setSavedData(JSON.stringify(response.outputs[0].outputs[0].outputs.message.message.text));
+
+      handleProductData(JSON.stringify(response.outputs[0].outputs[0].outputs.message.message.text));
+    } catch (e) {
+      console.error('Error parsing json', e);
+    }
+  }
 
   const extractBodyHTML = () => {
     chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
@@ -56,7 +74,7 @@ const EcommerceStep = () => {
         <p className="font-bold">Obtained HTML:</p>{' '}
         <div className="max-h-[200px] max-w-[300px] overflow-auto">{html}</div>
       </div>
-      <Button>Send html to langflow</Button>
+      <Button onClick={sendHtmlToLangflow}>Send html to langflow</Button>
       <div>
         <p className="font-bold">Obtained data from langflow:</p> <span>{savedData}</span>
       </div>
@@ -64,9 +82,29 @@ const EcommerceStep = () => {
   );
 };
 
-const FormStep = () => {
+interface FormStepProps {
+  productData: string;
+}
+
+const FormStep = ({ productData }: Readonly<FormStepProps>) => {
   const [savedData, setSavedData] = useState<string>(JSON.stringify({ data: 'something' }));
   const [html, setHtml] = useState<string>('');
+
+  useEffect(() => {
+    if (productData) {
+      setSavedData(productData);
+    }
+  }, [productData]);
+
+  const getLangflowData = async () => {
+    const response = await postFormHtmlParserFlow(html, savedData);
+
+    try {
+      setSavedData(JSON.stringify(response.outputs[0].outputs[0].outputs.message.message.text));
+    } catch (e) {
+      console.error('Error parsing json', e);
+    }
+  };
 
   const extractBodyHTML = () => {
     chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
@@ -94,7 +132,7 @@ const FormStep = () => {
         <p className="font-bold">Obtained HTML:</p>{' '}
         <div className="max-h-[200px] max-w-[300px] overflow-auto">{html}</div>
       </div>
-      <Button>Send form to fill + product data</Button>
+      <Button onClick={getLangflowData}>Send form to fill + product data</Button>
       <div>
         <p>Obtained data from langflow:</p> <span>{savedData}</span>
       </div>
@@ -104,6 +142,11 @@ const FormStep = () => {
 
 const Popup = () => {
   const [step, setStep] = useState<'ecommerce' | 'form'>('ecommerce');
+  const [productData, setProductData] = useState<string>('');
+
+  const handleProductData = (data: string) => {
+    setProductData(data);
+  };
 
   return (
     <div className="flex flex-col items-center justify-center pt-2">
@@ -116,7 +159,11 @@ const Popup = () => {
           Form
         </Button>
       </div>
-      {step === 'ecommerce' ? <EcommerceStep /> : <FormStep />}
+      {step === 'ecommerce' ? (
+        <EcommerceStep handleProductData={handleProductData} />
+      ) : (
+        <FormStep productData={productData} />
+      )}
     </div>
   );
 };
