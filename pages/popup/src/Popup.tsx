@@ -3,6 +3,7 @@ import { withErrorBoundary, withSuspense } from '@chrome-extension-boilerplate/s
 import React, { useState } from 'react';
 
 import { postEcommerceHtmlParserFlow, postFormHtmlParserFlow } from './requests/lanflow-requests';
+import { getBodyHTML, getFormHTML, modifyInputValues } from './extensionFunctions/chromeRequests';
 
 interface ButtonProps {
   children: React.ReactNode;
@@ -22,71 +23,6 @@ const Button = ({ children, className, isDisabled, isSelected, ...rest }: Button
     </button>
   );
 };
-
-export function getBodyHTML() {
-  return document.body.innerHTML;
-}
-
-export function modifyInputValues(data: string) {
-  let localData = null;
-  try {
-    localData = JSON.parse(data);
-  } catch (e) {
-    console.error('Error parsing json: ', e);
-    throw new Error('Error parsing json: ', e as Error);
-  }
-
-  const jsonData = JSON.parse(localData);
-
-  // Select all elements with jsname attribute: this is used to clear the initial text in the input fields
-  const elementsWithJsName = document.querySelectorAll('div[jsname="LwH6nd"]');
-
-  elementsWithJsName.forEach(element => {
-    element.textContent = '';
-  });
-
-  // Loop through the JSON data and set the values in the input fields
-  Object.keys(jsonData).forEach(key => {
-    const { HTMLselectorType, HTMLselectorValue, value } = jsonData[key];
-
-    let selector;
-
-    if (HTMLselectorType === 'id') {
-      selector = `#${HTMLselectorValue}`;
-    } else if (HTMLselectorType === 'class') {
-      selector = `.${HTMLselectorValue}`;
-    } else if (HTMLselectorType === 'aria-labelledby') {
-      selector = `input[aria-labelledby="${HTMLselectorValue}"]`;
-    } else {
-      console.error('Unsupported selector type: ', HTMLselectorType);
-      return;
-    }
-
-    const element = document.querySelector(selector);
-
-    // Set the value in the input field
-    if (element) {
-      if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
-        element.value = value;
-      } else {
-        if (Array.isArray(value)) {
-          element.innerHTML = value.map(item => JSON.stringify(item, null, 2)).join('<br>');
-        } else if (typeof value === 'object') {
-          element.innerHTML = JSON.stringify(value, null, 2);
-        } else {
-          element.innerHTML = value;
-        }
-      }
-    } else {
-      console.error('Element not found for selector:', selector);
-    }
-  });
-}
-
-export function getFormHTML() {
-  const form = document.querySelector('form');
-  return form ? form.outerHTML : 'No form found in the page.';
-}
 
 function saveToLocalStorage(data: string, key: string) {
   try {
@@ -144,7 +80,7 @@ const EcommerceStep = () => {
 };
 
 const FormStep = () => {
-  const [savedData, setSavedData] = useState<string>(localStorage.getItem('form-info') ?? '');
+  const [savedData, setSavedData] = useState<string>('');
   const [html, setHtml] = useState<string>('');
 
   const getLangflowData = async () => {
