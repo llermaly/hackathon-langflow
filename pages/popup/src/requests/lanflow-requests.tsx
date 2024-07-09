@@ -1,5 +1,5 @@
 const serviceUrl = 'http://127.0.0.1:7860';
-const ecommerceParserFlowId = '39df0  053-5764-4b6d-b00a-5e89bfaaed75';
+const ecommerceParserFlowId = '39df0053-5764-4b6d-b00a-5e89bfaaed75';
 const formParserFlowId = '2a92282c-99c4-4175-a572-41dc4c2bb6fc';
 
 /**
@@ -22,20 +22,26 @@ export async function postEcommerceHtmlParserFlow(html: string) {
     },
   };
 
+  let response = null;
+
   try {
-    const response = await fetch(`${serviceUrl}/api/v1/run/${ecommerceParserFlowId}?stream=false`, {
+    response = await fetch(`${serviceUrl}/api/v1/run/${ecommerceParserFlowId}?stream=false`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     });
+  } catch (e) {
+    throw new Error('Error in the e-commerce flow request: ', e as Error);
+  }
 
+  try {
     const jsonResponse = await response.json();
 
     return jsonResponse?.outputs[0]?.outputs[0]?.outputs?.message?.message?.text;
   } catch (e) {
-    throw new Error('Error in the e-commerce flow request: ', e as Error);
+    throw new Error('Error parsing json: ', e as Error);
   }
 }
 
@@ -60,19 +66,25 @@ export async function postFormHtmlParserFlow(html: string, json: string) {
     },
   };
 
+  let response = null;
+
   try {
-    const response = await fetch(`${serviceUrl}/api/v1/run/${formParserFlowId}?stream=false`, {
+    response = await fetch(`${serviceUrl}/api/v1/run/${formParserFlowId}?stream=false`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     });
+  } catch (e) {
+    throw new Error('Error in the form flow request: ', e as Error);
+  }
 
+  try {
     const jsonResponse = await response.json();
 
     return jsonResponse?.outputs[0]?.outputs[0]?.outputs?.message?.message?.text;
   } catch (e) {
-    throw new Error('Error in the form flow request: ', e as Error);
+    throw new Error('Error parsing json: ', e as Error);
   }
 }

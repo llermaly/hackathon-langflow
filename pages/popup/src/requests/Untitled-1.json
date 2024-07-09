@@ -1,0 +1,135 @@
+{
+  "granteeTime": "Llega hoy antes de las 8 p.m.",
+  "otherInformation": [
+    {
+      "key": "storeId",
+      "value": "mobile0fe7c74-20"
+    },
+    {
+      "key": "shippingCarrier",
+      "value": "PASAREX"
+    },
+    {
+      "key": "trackingNumber",
+      "value": "AMZPSR010387802"
+    },
+    {
+      "key": "shippingAddress",
+      "value": "Jeffrey Sneider Rengifo Marin, Calle 95 #50b-36, Piso 1, puerta blanca., Medellin, Antioquia 050004"
+    },
+    {
+      "key": "deliveryStatus",
+      "value": "En reparto"
+    },
+    {
+      "key": "deliveryUpdates",
+      "value": [
+        {
+          "date": "martes, 9 de julio",
+          "location": "Medellin, CO",
+          "status": "Paquete en reparto.",
+          "time": "9:13 a.m."
+        },
+        {
+          "date": "lunes, 8 de julio",
+          "location": "Medellin, CO",
+          "status": "El transportista está reteniendo el paquete porque el cliente se mudó. Por favor comunícate con el transportista para proporcionar más información sobre la dirección.",
+          "time": "4:54 p.m."
+        },
+        {
+          "date": "lunes, 8 de julio",
+          "location": "Medellin, CO",
+          "status": "Paquete en reparto.",
+          "time": "10:08 a.m."
+        },
+        {
+          "date": "lunes, 8 de julio",
+          "location": "Bogota, CO",
+          "status": "El cliente solicitó una entrega programada. Ahora el paquete se entregará en el horario solicitado.",
+          "time": "8:19 a.m."
+        },
+        {
+          "date": "domingo, 7 de julio",
+          "location": "Medellin, CO",
+          "status": "Paquete recibido en las instalaciones del transportista.",
+          "time": "9:07 a.m."
+        },
+        {
+          "date": "sábado, 6 de julio",
+          "location": "Bogota, CO",
+          "status": "El paquete salió de las instalaciones del transportista.",
+          "time": "10:10 a.m."
+        },
+        {
+          "date": "sábado, 6 de julio",
+          "location": "Bogota, CO",
+          "status": "Completed customs clearance.",
+          "time": "10:06 a.m."
+        },
+        {
+          "date": "sábado, 6 de julio",
+          "location": "Bogota, CO",
+          "status": "Paquete recibido en las instalaciones del transportista.",
+          "time": "10:03 a.m."
+        },
+        {
+          "date": "jueves, 4 de julio",
+          "location": "BOGOTA, CO",
+          "status": "Paquete transferido a otro transportista para su entrega.",
+          "time": "3:42 p.m."
+        },
+        {
+          "date": "jueves, 4 de julio",
+          "location": "Miami Intl, US",
+          "status": "Paquete en tránsito. Ya llegó el vuelo que transporta el paquete.",
+          "time": "10:00 a.m."
+        },
+        {
+          "date": "jueves, 4 de julio",
+          "location": "Miami Intl, US",
+          "status": "Paquete en tránsito. Ya salió el vuelo que transporta el paquete.",
+          "time": "2:30 a.m."
+        },
+        {
+          "date": "miércoles, 3 de julio",
+          "location": "Miami Intl, US",
+          "status": "El paquete salió de las instalaciones del transportista.",
+          "time": "9:12 p.m."
+        },
+        {
+          "date": "miércoles, 3 de julio",
+          "location": "CO",
+          "status": "Se inició el despacho de aduanas en el país de destino.",
+          "time": "8:20 p.m."
+        },
+        {
+          "date": "miércoles, 3 de julio",
+          "location": "Miami Intl, US",
+          "status": "Paquete recibido en las instalaciones del transportista.",
+          "time": "11:23 a.m."
+        },
+        {
+          "date": "miércoles, 3 de julio",
+          "location": "Miami, FLORIDA US",
+          "status": "El paquete salió de una instalación de Amazon.",
+          "time": "6:01 a.m."
+        },
+        {
+          "date": "martes, 2 de julio",
+          "location": "Miami, FLORIDA US",
+          "status": "Paquete recibido en una instalación de Amazon.",
+          "time": "9:29 p.m."
+        },
+        {
+          "date": "martes, 2 de julio",
+          "status": "El paquete ha dejado las instalaciones del vendedor y está en camino al transportista."
+        }
+      ]
+    }
+  ],
+  "productDescription": "TP-Link - Adaptador Bluetooth USB para PC (UB400), receptor de Dongle Bluetooth 4.0 compatible con Windows 10/8.1/8/7/XP para computadoras de sobremesa, portátil, mouse, teclado, impresoras, auriculares, altavoces, mandos de PS4/ Xbox",
+  "productName": "TP-Link - Adaptador Bluetooth USB para PC (UB400)",
+  "productPrice": 100,
+  "storeName": "Amazon",
+  "trackingId": "mobile0fe7c74-20"
+}
