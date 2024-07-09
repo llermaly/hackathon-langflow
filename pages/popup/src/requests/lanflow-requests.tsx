@@ -22,15 +22,21 @@ export async function postEcommerceHtmlParserFlow(html: string) {
     },
   };
 
-  const response = await fetch(`${serviceUrl}/api/v1/run/${ecommerceParserFlowId}?stream=false`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
+  try {
+    const response = await fetch(`${serviceUrl}/api/v1/run/${ecommerceParserFlowId}?stream=false`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
 
-  return response.json();
+    const jsonResponse = await response.json();
+
+    return jsonResponse?.outputs[0]?.outputs[0]?.outputs?.message?.message?.text;
+  } catch (e) {
+    throw new Error('Error in the e-commerce flow request: ', e as Error);
+  }
 }
 
 /**
@@ -54,13 +60,19 @@ export async function postFormHtmlParserFlow(html: string, json: string) {
     },
   };
 
-  const response = await fetch(`${serviceUrl}/api/v1/run/${formParserFlowId}?stream=false`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
+  try {
+    const response = await fetch(`${serviceUrl}/api/v1/run/${formParserFlowId}?stream=false`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
 
-  return response.json();
+    const jsonResponse = await response.json();
+
+    return jsonResponse?.outputs[0]?.outputs[0]?.outputs?.message?.message?.text;
+  } catch (e) {
+    throw new Error('Error in the form flow request: ', e as Error);
+  }
 }

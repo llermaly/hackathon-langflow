@@ -44,9 +44,9 @@ const EcommerceStep = ({ handleProductData }: Readonly<EcommerceStepProps>) => {
     const response = await postEcommerceHtmlParserFlow(html);
 
     try {
-      setSavedData(JSON.stringify(response.outputs[0].outputs[0].outputs.message.message.text));
+      setSavedData(JSON.stringify(response));
 
-      handleProductData(JSON.stringify(response.outputs[0].outputs[0].outputs.message.message.text));
+      handleProductData(JSON.stringify(response?.outputs[0]?.outputs[0]?.outputs?.message?.message?.text));
     } catch (e) {
       console.error('Error parsing json', e);
     }
@@ -100,7 +100,7 @@ const FormStep = ({ productData }: Readonly<FormStepProps>) => {
     const response = await postFormHtmlParserFlow(html, savedData);
 
     try {
-      setSavedData(JSON.stringify(response.outputs[0].outputs[0].outputs.message.message.text));
+      setSavedData(JSON.stringify(response));
     } catch (e) {
       console.error('Error parsing json', e);
     }
