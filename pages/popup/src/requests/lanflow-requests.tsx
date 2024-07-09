@@ -1,5 +1,5 @@
-const serviceUrl = 'http://127.0.0.1:7862';
-const ecommerceParserFlowId = '39df0053-5764-4b6d-b00a-5e89bfaaed75';
+const serviceUrl = 'http://127.0.0.1:7860';
+const ecommerceParserFlowId = '39df0  053-5764-4b6d-b00a-5e89bfaaed75';
 const formParserFlowId = '2a92282c-99c4-4175-a572-41dc4c2bb6fc';
 
 /**

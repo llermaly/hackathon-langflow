@@ -1,6 +1,6 @@
 import '@src/Popup.css';
 import { withErrorBoundary, withSuspense } from '@chrome-extension-boilerplate/shared';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { postEcommerceHtmlParserFlow, postFormHtmlParserFlow } from './requests/lanflow-requests';
 
@@ -32,25 +32,30 @@ export function getFormHTML() {
   return form ? form.outerHTML : 'No se encontró ningún formulario';
 }
 
-interface EcommerceStepProps {
-  handleProductData: (data: string) => void;
-}
-
-const EcommerceStep = ({ handleProductData }: Readonly<EcommerceStepProps>) => {
+const EcommerceStep = () => {
   const [savedData, setSavedData] = useState<string>(JSON.stringify({ data: 'something' }));
   const [html, setHtml] = useState<string>('');
 
-  async function sendHtmlToLangflow() {
+  const handleSaveToLocalStorage = (data: string) => {
+    try {
+      localStorage.setItem('e-commerce-info', data);
+    } catch (e) {
+      throw new Error('Error saving to local storage: ', e as Error);
+    }
+  };
+
+  const sendHtmlToLangflow = async () => {
     const response = await postEcommerceHtmlParserFlow(html);
 
     try {
       setSavedData(JSON.stringify(response));
 
-      handleProductData(JSON.stringify(response?.outputs[0]?.outputs[0]?.outputs?.message?.message?.text));
+      handleSaveToLocalStorage(JSON.stringify(response));
     } catch (e) {
-      console.error('Error parsing json', e);
+      console.error('Error parsing json: ', e);
+      throw new Error('Error parsing json: ', e as Error);
     }
-  }
+  };
 
   const extractBodyHTML = () => {
     chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
@@ -82,27 +87,29 @@ const EcommerceStep = ({ handleProductData }: Readonly<EcommerceStepProps>) => {
   );
 };
 
-interface FormStepProps {
-  productData: string;
-}
-
-const FormStep = ({ productData }: Readonly<FormStepProps>) => {
-  const [savedData, setSavedData] = useState<string>(JSON.stringify({ data: 'something' }));
+const FormStep = () => {
+  const [savedData, setSavedData] = useState<string>(localStorage.getItem('e-commerce-info') ?? '');
   const [html, setHtml] = useState<string>('');
 
-  useEffect(() => {
-    if (productData) {
-      setSavedData(productData);
+  const handleSaveToLocalStorage = (data: string) => {
+    try {
+      localStorage.setItem('form-info', data);
+    } catch (e) {
+      throw new Error('Error saving to local storage: ', e as Error);
     }
-  }, [productData]);
+  };
 
   const getLangflowData = async () => {
+    console.log('saved: ', savedData);
     const response = await postFormHtmlParserFlow(html, savedData);
 
     try {
       setSavedData(JSON.stringify(response));
+
+      handleSaveToLocalStorage(JSON.stringify(response));
     } catch (e) {
-      console.error('Error parsing json', e);
+      console.error('Error parsing json: ', e);
+      throw new Error('Error parsing json: ', e as Error);
     }
   };
 
@@ -142,11 +149,6 @@ const FormStep = ({ productData }: Readonly<FormStepProps>) => {
 
 const Popup = () => {
   const [step, setStep] = useState<'ecommerce' | 'form'>('ecommerce');
-  const [productData, setProductData] = useState<string>('');
-
-  const handleProductData = (data: string) => {
-    setProductData(data);
-  };
 
   return (
     <div className="flex flex-col items-center justify-center pt-2">
@@ -159,11 +161,7 @@ const Popup = () => {
           Form
         </Button>
       </div>
-      {step === 'ecommerce' ? (
-        <EcommerceStep handleProductData={handleProductData} />
-      ) : (
-        <FormStep productData={productData} />
-      )}
+      {step === 'ecommerce' ? <EcommerceStep /> : <FormStep />}
     </div>
   );
 };
