@@ -34,18 +34,21 @@ To import flows into Langflow, follow these steps:
 
    Note: The cloud version uses an older version of Langflow, this can be generate some issues and incompatibilities with the flows.
 
+   **Instal with docker:**
+   In the folder `/langflow-docker`, run the command `docker-compose up -d` to start the Langflow container.
+
 2. **Run Langflow:**
    Execute `langflow run` in your terminal to start Langflow.
 
 3. **Access Langflow:**
    Once Langflow is up and running, navigate to `/all` in your browser.
 
-   ![alt text](assets/image-2.png)
+   ![alt text](./assets/image-2.png)
 
 4. **Import Flows:**
    On the right-hand side of the "Folders" section, you'll find an icon to import a JSON file. Click on this icon to import your JSON flows.
    
-    ![Import gif](assets/import.GIF)
+    ![Import gif](./assets/import.GIF)
 
 # 3. Using
 
