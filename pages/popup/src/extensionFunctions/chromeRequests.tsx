@@ -24,6 +24,19 @@ export function modifyInputValues(data: string) {
     return values;
   }
 
+  function setHTMLvalue(htmlNode: HTMLElement, value: any) {
+    if (htmlNode.tagName === 'INPUT' || htmlNode.tagName === 'TEXTAREA') {
+      // If the value is not text, extract the values from the object or array
+      if (Array.isArray(value) || typeof value === 'object') {
+        const values = extractValues(value);
+
+        htmlNode.value = values.join('\n');
+      } else {
+        htmlNode.value = value;
+      }
+    }
+  }
+
   let localData = null;
   try {
     localData = JSON.parse(data);
@@ -34,12 +47,14 @@ export function modifyInputValues(data: string) {
 
   const jsonData = JSON.parse(localData);
 
-  // Select all elements with jsname attribute: this is used to clear the initial text in the input fields
+  // Select all elements with jsname attribute: this is used to clear the initial text in the input fields for Google forms
   const elementsWithJsName = document.querySelectorAll('div[jsname="LwH6nd"]');
 
-  elementsWithJsName.forEach(element => {
-    element.textContent = '';
-  });
+  if (elementsWithJsName?.length) {
+    elementsWithJsName.forEach(element => {
+      element.textContent = '';
+    });
+  }
 
   // Loop through the JSON data and set the values in the input fields
   Object.keys(jsonData).forEach(key => {
@@ -62,15 +77,12 @@ export function modifyInputValues(data: string) {
 
     // Set the value in the input field
     if (element) {
-      if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
-        // If the value is not text, extract the values from the object or array
-        if (Array.isArray(value) || typeof value === 'object') {
-          const values = extractValues(value);
+      const innerInput = element.querySelector('input');
 
-          element.value = values.join('\n');
-        } else {
-          element.value = value;
-        }
+      if (innerInput) {
+        setHTMLvalue(innerInput, value);
+      } else {
+        setHTMLvalue(element as HTMLElement, value);
       }
     } else {
       console.error('Element not found for selector:', selector);
@@ -79,6 +91,16 @@ export function modifyInputValues(data: string) {
 }
 
 export function getFormHTML() {
-  const form = document.querySelector('form');
-  return form ? form.outerHTML : 'No form found in the page.';
+  const form = document.querySelectorAll('form');
+
+  if (form.length === 0) return 'No form found in the page.';
+
+  const forms = Array.from(form).map(form => {
+    return form.outerHTML;
+  });
+
+  const formsString = forms.join('\n\n');
+  console.log('formsString: ', formsString);
+
+  return formsString || 'No form found in the page.';
 }

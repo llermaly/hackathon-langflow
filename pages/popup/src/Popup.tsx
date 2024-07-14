@@ -110,7 +110,6 @@ const FormStep = () => {
           func: getFormHTML,
         },
         results => {
-          console.log(results[0].result);
           setHtml(results?.[0]?.result ?? '');
         },
       );
