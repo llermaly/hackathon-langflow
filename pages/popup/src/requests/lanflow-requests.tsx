@@ -1,6 +1,6 @@
-const serviceUrl = 'http://127.0.0.1:7860';
-const ecommerceParserFlowId = '39df0053-5764-4b6d-b00a-5e89bfaaed75';
-const formParserFlowId = '2a92282c-99c4-4175-a572-41dc4c2bb6fc';
+const serviceUrl = 'https://langflowailangflowlatest-production-4888.up.railway.app';
+const ecommerceParserFlowId = 'e-commerce-endpoint';
+const formParserFlowId = 'form-endpoint';
 
 /**
  * Sends a POST request to the e-commerce HTML parser flow API endpoint.
@@ -53,7 +53,7 @@ export async function postEcommerceHtmlParserFlow(html: string) {
  */
 export async function postFormHtmlParserFlow(html: string, json: string) {
   const data = {
-    input_value: `${html}:${json}`,
+    input_value: `form HTML: ${html} : JSON extracted from ecommerce ${json}`,
     output_type: 'chat',
     input_type: 'chat',
     tweaks: {
